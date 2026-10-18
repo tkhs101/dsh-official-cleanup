@@ -24,6 +24,10 @@
   config:
     enabled: false
 
+# This row's `name` is the module specifier the Loader imports and MUST equal
+# this package's own `name` in package.json. Keep the two in step: a stale name
+# makes the row fail to import (`ERR_MODULE_NOT_FOUND`) and the plugin silently
+# loses its Host half. `npm test` asserts it.
 - insert:
     - id: official-cleanup
-      name: "@local/dsh-official-cleanup"
+      name: "dsh-official-cleanup"

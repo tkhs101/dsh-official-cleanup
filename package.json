@@ -1,8 +1,24 @@
 {
-  "name": "@local/dsh-official-cleanup",
-  "version": "0.3.0",
-  "private": true,
-  "description": "Hide unused official DeepSeek surfaces in the Harness Web UI and keep the official-model Session-log upload off.",
+  "name": "dsh-official-cleanup",
+  "version": "0.4.1",
+  "description": "DeepSeek Harness Web UI cleanup: a direct Settings launcher instead of the sidebar 更多 menu, no unusable official DeepSeek provider card, and the official-model Session-log upload pinned off. · DSH 界面官方入口清理",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "harness-plugin",
+    "web-ui"
+  ],
+  "license": "MIT",
+  "author": "tkhs101",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkhs101/dsh-official-cleanup.git"
+  },
+  "homepage": "https://github.com/tkhs101/dsh-official-cleanup#readme",
+  "bugs": {
+    "url": "https://github.com/tkhs101/dsh-official-cleanup/issues"
+  },
   "type": "module",
   "engines": {
     "dsh": ">=0.2.1-rc.2 <0.3.0-0"
@@ -34,5 +50,8 @@
         "@deepseek-ai/dsh-client-ui-layout"
       ]
     }
+  },
+  "scripts": {
+    "test": "node --test test/"
   }
 }

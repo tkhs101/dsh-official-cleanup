@@ -51,20 +51,23 @@
 要求 dsh `>= 0.2.1-rc.2`（manifest 里的 `engines.dsh`，版本不符时 DSH 会直接给出提示而不是崩掉）。纯 JavaScript、无构建步骤、无运行时依赖，所以从 git 安装不需要 `prepare` 脚本。
 
 ```bash
-# 从 GitHub 装（推荐锁定 tag，避免以后被上游改动影响）
-dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.3.0
+# 从 npm 装（推荐，最快也最省事）
+dsh plugin --profile web add dsh-official-cleanup
 
-# 跟主干（始终取最新）
-dsh plugin --profile web add github:tkhs101/dsh-official-cleanup
+# 锁定版本
+dsh plugin --profile web add dsh-official-cleanup@0.4.1
+
+# 从 GitHub 装（想跟仓库走或 npm 不可用时）
+dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.4.1
 
 # 从本地目录装（自己改着玩）
 dsh plugin --profile web add /path/to/dsh-official-cleanup
 
 # 卸载
-dsh plugin --profile web remove @local/dsh-official-cleanup
+dsh plugin --profile web remove dsh-official-cleanup
 ```
 
-`dsh plugin` 只是把参数原样转给 profile 目录里的 pnpm，所以 `add / remove / why` 都能用；装完 DSH 会自己把包加进 `dsh.profile.bundles` 并应用它的补丁层。
+`dsh plugin` 只是把参数原样转给 profile 目录里的 pnpm，所以 `add / remove / why` 都能用，pnpm 的旗标（例如 `--state-dir`）也能一起传；装完 DSH 会自己把包加进 `dsh.profile.bundles` 并应用它的补丁层。
 
 装完后**刷新页面**即可；本插件的补丁层改了 loader entry（`llm-deepseek`），那一部分要**重启一次 Harness** 才在新进程里生效。
 
@@ -74,12 +77,17 @@ dsh plugin --profile web remove @local/dsh-official-cleanup
 
 | 渠道 | 状态 | 用户装法 |
 |---|---|---|
-| GitHub 仓库 | ✅ 已验证 | `dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.3.0` |
-| npm | ⛔ 未发布 | 需要先把 `package.json` 的 `"private": true` 去掉并把 `@local/` 换成可发布的名字；之后 `dsh plugin --profile web add <包名>` |
+| npm | ✅ 已发布 | `dsh plugin --profile web add dsh-official-cleanup` |
+| GitHub 仓库 | ✅ 已验证 | `dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.4.1` |
 | 插件市场（rc.2 的 Discover 面板） | ⛔ 未收录 | 市场读用户自己配置的索引 URL（`plugin-market` 的 `indexes`），索引用 format 1 的 JSON；Git 托管的条目用 commit 固定的 `git+https` 地址 |
 | 社区清单（awesome-dsh-plugins 系列） | ⛔ 待提 PR | 往清单仓库加一行 + 本仓库启用 `dsh-plugin` topic（topic 已加） |
 
 本仓库已启用 `dsh-plugin` / `deepseek-harness` / `dsh` 三个 topic，社区清单目前就是靠这个筛。
+
+### 发布注意事项（维护者）
+
+- `cordis.patch.yml` 里 `insert` 行的 `name` **必须等于** `package.json` 的 `name`——它是 Loader 导入用的模块标识符。改名时忘了同步，行会 `ERR_MODULE_NOT_FOUND`，插件静默失去 Host half。`npm test` 就是盯这条不变量（以及 `engines.dsh`、client 模块 id、打包文件清单）。
+- 刚 `npm publish` 完的几分钟内，registry 的元数据和 tarball 是异步上线的，中间可能出现 `0.0.0-stage` 占位版本，或 tarball 的 CDN 缓存住一次 404（`max-age=300`）。用户这时装会失败，等几分钟或加 `?ts=` 换 URL 就能验证；不是包本身坏了。
 
 ## 第三方声明
 
