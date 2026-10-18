@@ -1,0 +1,29 @@
+# dsh-official-cleanup — bundle patch layer.
+#
+# Feature 2 — remove the official DeepSeek provider card from Settings → 模型.
+# The card is data, not markup: the Models page renders its rows from the
+# configurable-provider directory, and disabling this entry removes the
+# directory entry together with its adapter routes (one registration effect).
+# The page already tolerates the absence (`adapter-absent`), so the card is
+# gone because it no longer exists — no DOM editing involved.
+#
+# To restore the card, drop the `disabled: true` line (or the whole block) and
+# restart the Harness.
+- id: llm-deepseek
+  name: "@deepseek-ai/dsh-llm-deepseek-api-key"
+  disabled: true
+
+# Feature 3 — the official-model Session-log upload defaults to off.
+# `enabled` is the only switch the session-log plugin reads and its schema
+# default is `true`, so the "off" state has to be written down somewhere.
+# This row is only a default: a bundle layer is the lowest-precedence patch
+# layer, so the profile patch still wins. The Host half pins the value in the
+# fiber's resolved configuration, which is the enforcement that actually holds.
+- id: session-log-deepseek
+  name: "@deepseek-ai/dsh-session-log-deepseek"
+  config:
+    enabled: false
+
+- insert:
+    - id: official-cleanup
+      name: "@local/dsh-official-cleanup"

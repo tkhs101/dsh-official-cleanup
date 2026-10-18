@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Official Surface Cleanup",
+    "description": "Hides the unused Feedback/Login rows in the sidebar 更多 menu and the unusable official DeepSeek provider card, and keeps the official-model Session-log upload turned off."
+  }
+}

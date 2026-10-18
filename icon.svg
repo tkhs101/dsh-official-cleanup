@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Official Surface Cleanup">
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="#eef2f7"/>
+  <!-- funnel: the official surfaces this plugin filters out -->
+  <path d="M18 20h28l-11 13v12l-6 5V33z" fill="#247bbf"/>
+  <!-- removal marker -->
+  <circle cx="45" cy="45" r="6.5" fill="#e5484d"/>
+  <path d="M42 42l6 6M48 42l-6 6" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

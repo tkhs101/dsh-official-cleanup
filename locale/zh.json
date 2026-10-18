@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "官方界面清理",
+    "description": "隐藏侧栏「更多」菜单里用不到的「意见反馈 / 登录」，隐藏模型配置页里无法使用的 DeepSeek 官方 Provider 卡片，并让「使用官方模型 API 时上传 Session Log」始终保持关闭。"
+  }
+}
