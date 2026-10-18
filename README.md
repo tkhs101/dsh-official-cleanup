@@ -48,12 +48,38 @@
 
 ## 安装
 
+要求 dsh `>= 0.2.1-rc.2`（manifest 里的 `engines.dsh`，版本不符时 DSH 会直接给出提示而不是崩掉）。纯 JavaScript、无构建步骤、无运行时依赖，所以从 git 安装不需要 `prepare` 脚本。
+
 ```bash
-# 作为 profile bundle 安装（推荐，DSH 自己管依赖与补丁层）
-dsh plugin --profile web add <本仓库目录或包路径>
+# 从 GitHub 装（推荐锁定 tag，避免以后被上游改动影响）
+dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.3.0
+
+# 跟主干（始终取最新）
+dsh plugin --profile web add github:tkhs101/dsh-official-cleanup
+
+# 从本地目录装（自己改着玩）
+dsh plugin --profile web add /path/to/dsh-official-cleanup
+
+# 卸载
+dsh plugin --profile web remove @local/dsh-official-cleanup
 ```
 
-装完刷新页面；`cordis.patch.yml` 里改了 loader entry 的部分需要重启一次 Harness。
+`dsh plugin` 只是把参数原样转给 profile 目录里的 pnpm，所以 `add / remove / why` 都能用；装完 DSH 会自己把包加进 `dsh.profile.bundles` 并应用它的补丁层。
+
+装完后**刷新页面**即可；本插件的补丁层改了 loader entry（`llm-deepseek`），那一部分要**重启一次 Harness** 才在新进程里生效。
+
+想把 dsh 换成别的 profile，把 `--profile web` 换成对应名字即可。
+
+## 分发渠道
+
+| 渠道 | 状态 | 用户装法 |
+|---|---|---|
+| GitHub 仓库 | ✅ 已验证 | `dsh plugin --profile web add github:tkhs101/dsh-official-cleanup#v0.3.0` |
+| npm | ⛔ 未发布 | 需要先把 `package.json` 的 `"private": true` 去掉并把 `@local/` 换成可发布的名字；之后 `dsh plugin --profile web add <包名>` |
+| 插件市场（rc.2 的 Discover 面板） | ⛔ 未收录 | 市场读用户自己配置的索引 URL（`plugin-market` 的 `indexes`），索引用 format 1 的 JSON；Git 托管的条目用 commit 固定的 `git+https` 地址 |
+| 社区清单（awesome-dsh-plugins 系列） | ⛔ 待提 PR | 往清单仓库加一行 + 本仓库启用 `dsh-plugin` topic（topic 已加） |
+
+本仓库已启用 `dsh-plugin` / `deepseek-harness` / `dsh` 三个 topic，社区清单目前就是靠这个筛。
 
 ## 第三方声明
 
