@@ -47,6 +47,15 @@ test('the declared client modules are the ones a web profile serves', () => {
   for (const id of pkg.dsh.client.inject) assert.match(id, /^@deepseek-ai\/dsh-client-/);
 });
 
+test('the client bundle registers under this package name', () => {
+  // The web loader matches each served bundle by package name, so a rename
+  // that misses this line fails the whole boot ("loaded without registering").
+  const client = read('client.js');
+  const registered = /__ModuleLoader__\.load\(\{\s*id:\s*['"]([^'"]+)['"]/.exec(client);
+  assert.notEqual(registered, null, 'client.js does not register via __ModuleLoader__.load');
+  assert.equal(registered[1], pkg.name);
+});
+
 test('every shipped path exists and is declared', () => {
   for (const file of ['index.js', 'client.js', 'cordis.patch.yml', 'icon.svg', 'README.md', 'LICENSE']) {
     assert.ok(existsSync(new URL(file, root)), `${file} is missing`);

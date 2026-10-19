@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: '@local/dsh-official-cleanup',
+  id: 'dsh-official-cleanup',
   factory(require) {
     const React = require('react');
     const h = React.createElement;
